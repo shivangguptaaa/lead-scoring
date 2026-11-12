@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>X Education · Lead Scoring Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --surface-3: #f1f5f9;
+      --nav-bg: rgba(255, 255, 255, 0.88);
+      --hero-bg: linear-gradient(135deg, #ffffff 0%, #f5f7ff 100%);
+      --gauge-bg: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      --gauge-track: #e2e8f0;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --fg: #0f172a;
+      --muted: #64748b;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-soft: #eef2ff;
+      --primary-border: #c7d2fe;
+      --cyan: #0ea5e9;
+      --hot: #e11d48;
+      --hot-soft: #fff1f2;
+      --hot-border: #fecdd3;
+      --warm: #d97706;
+      --warm-soft: #fffbeb;
+      --warm-border: #fde68a;
+      --cold: #0284c7;
+      --cold-soft: #f0f9ff;
+      --cold-border: #bae6fd;
+      --success: #059669;
+      --success-soft: #ecfdf5;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 10px 28px -8px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b1120;
+      --surface: #111827;
+      --surface-2: #172033;
+      --surface-3: #1e293b;
+      --nav-bg: rgba(17, 24, 39, 0.88);
+      --hero-bg: linear-gradient(135deg, #111827 0%, #162038 100%);
+      --gauge-bg: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+      --gauge-track: #1e293b;
+      --border: #1f2937;
+      --border-strong: #334155;
+      --fg: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #818cf8;
+      --primary-hover: #6366f1;
+      --primary-soft: rgba(99, 102, 241, 0.16);
+      --primary-border: rgba(129, 140, 248, 0.35);
+      --cyan: #22d3ee;
+      --hot: #fb7185;
+      --hot-soft: rgba(244, 63, 94, 0.15);
+      --hot-border: rgba(251, 113, 133, 0.35);
+      --warm: #fbbf24;
+      --warm-soft: rgba(245, 158, 11, 0.15);
+      --warm-border: rgba(251, 191, 36, 0.35);
+      --cold: #38bdf8;
+      --cold-soft: rgba(14, 165, 233, 0.15);
+      --cold-border: rgba(56, 189, 248, 0.35);
+      --success: #34d399;
+      --success-soft: rgba(16, 185, 129, 0.14);
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 12px 32px -8px rgba(0, 0, 0, 0.45);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      line-height: 1.5;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      background-image:
+        radial-gradient(circle at 0% 0%, rgba(79, 70, 229, 0.11) 0%, transparent 42%),
+        radial-gradient(circle at 100% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 38%);
+    }
+
+    .accent-strip {
+      height: 3px;
+      background: linear-gradient(90deg, #4f46e5, #06b6d4, #10b981);
+    }
+
+    .navbar {
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .nav-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #4f46e5, #06b6d4);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 0.98rem;
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.28);
+    }
+
+    .brand-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.06rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+    }
+
+    .brand-sub { font-size: 0.75rem; color: var(--muted); }
+
+    .nav-right {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tabs {
+      display: inline-flex;
+      background: var(--surface-3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.81rem;
+      font-weight: 600;
+      padding: 7px 13px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: var(--fg); }
+
+    .tab-btn.active {
+      background: var(--surface);
+      color: var(--primary);
+      border-color: var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .theme-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 13px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--fg);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s ease;
+    }
+
+    .theme-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    .shell {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 22px 20px 64px;
+    }
+
+    /* Hero Strip */
+    .hero-banner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--hero-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px 24px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-banner h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+
+    .hero-banner p {
+      color: var(--muted);
+      font-size: 0.89rem;
+      margin-top: 4px;
+      max-width: 660px;
+    }
+
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+    .model-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      border: 1px solid var(--primary-border);
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.22);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.2s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 940px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--fg);
+    }
+
+    .mono-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      background: var(--surface-3);
+      padding: 4px 9px;
+      border-radius: 7px;
+    }
+
+    /* Live Mode Switch */
+    .live-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--fg);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .live-switch input {
+      accent-color: #4f46e5;
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    /* Presets */
+    .preset-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 560px) {
+      .preset-bar { grid-template-columns: 1fr; }
+    }
+
+    .preset-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 13px;
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      color: var(--fg);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .preset-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+    .preset-btn.hot:hover, .preset-btn.hot.active { border-color: var(--hot); background: var(--hot-soft); color: var(--hot); }
+    .preset-btn.warm:hover, .preset-btn.warm.active { border-color: var(--warm); background: var(--warm-soft); color: var(--warm); }
+    .preset-btn.cold:hover, .preset-btn.cold.active { border-color: var(--cold); background: var(--cold-soft); color: var(--cold); }
+
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .dot.hot { background: var(--hot); }
+    .dot.warm { background: var(--warm); }
+    .dot.cold { background: var(--cold); }
+
+    .preset-score {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      opacity: 0.85;
+    }
+
+    /* What-If Slider Banner */
+    .whatif-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+
+    .whatif-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.76rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .whatif-head span:last-child {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary);
+    }
+
+    .whatif-box input[type="range"] {
+      width: 100%;
+      accent-color: #4f46e5;
+      cursor: pointer;
+    }
+
+    .whatif-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Form */
+    .section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+      margin: 15px 0 10px;
+      padding-top: 13px;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-title:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+
+    .form-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .form-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+    @media (max-width: 600px) {
+      .form-grid-3, .form-grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .field label {
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .field input, .field select {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      border-radius: 10px;
+      padding: 9px 11px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.84rem;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .field input:focus, .field select:focus {
+      background: var(--surface);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.25);
+      transition: all 0.16s ease;
+      margin-top: 8px;
+    }
+
+    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.06); }
+    .btn-primary:disabled { opacity: 0.6; cursor: wait; transform: none; }
+
+    .btn-secondary {
+      padding: 8px 13px;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--fg);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.79rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+
+    /* Score Gauge Panel */
+    .gauge-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 16px;
+      background: var(--gauge-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 14px;
+    }
+
+    .gauge-svg-box { position: relative; width: 220px; height: 132px; }
+    .gauge-svg { width: 100%; height: 100%; overflow: visible; }
+
+    .gauge-track {
+      fill: none;
+      stroke: var(--gauge-track);
+      stroke-width: 14;
+      stroke-linecap: round;
+    }
+
+    .gauge-fill {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 14;
+      stroke-linecap: round;
+      stroke-dasharray: 251.2;
+      stroke-dashoffset: 251.2;
+      transition: stroke-dashoffset 0.55s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.25s ease;
+    }
+
+    .gauge-center {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 6px;
+      text-align: center;
+    }
+
+    .gauge-score {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 3.1rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .gauge-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.67rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-top: 3px;
+    }
+
+    .tier-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface-3);
+      color: var(--muted);
+    }
+
+    .tier-badge.hot { color: var(--hot); background: var(--hot-soft); border-color: var(--hot-border); }
+    .tier-badge.warm { color: var(--warm); background: var(--warm-soft); border-color: var(--warm-border); }
+    .tier-badge.cold { color: var(--cold); background: var(--cold-soft); border-color: var(--cold-border); }
+
+    .action-text {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.06rem;
+      font-weight: 700;
+      margin-top: 10px;
+      text-align: center;
+      color: var(--fg);
+    }
+
+    /* Key Signal Chips */
+    .signals-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+
+    .signals-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .signal-chip {
+      font-size: 0.73rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--fg);
+    }
+
+    .signal-chip strong { color: var(--primary); }
+
+    /* Spectrum */
+    .spectrum-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+
+    .spectrum-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .spectrum-bar {
+      position: relative;
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      display: flex;
+      background: var(--surface-3);
+    }
+
+    .seg-cold { width: 46%; background: #38bdf8; opacity: 0.65; }
+    .seg-warm { width: 20%; background: #f59e0b; opacity: 0.75; }
+    .seg-hot { width: 34%; background: #f43f5e; opacity: 0.75; }
+
+    .spectrum-marker { position: relative; height: 14px; margin-top: -12px; }
+
+    .marker-pin {
+      position: absolute;
+      top: 0;
+      width: 6px;
+      height: 14px;
+      border-radius: 3px;
+      background: var(--fg);
+      border: 1.5px solid var(--surface);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+      transform: translateX(-50%);
+      transition: left 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      display: none;
+    }
+
+    .spectrum-legend {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.66rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* Outreach Box */
+    .outreach-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .outreach-body {
+      font-size: 0.84rem;
+      color: var(--fg);
+      white-space: pre-wrap;
+      line-height: 1.55;
+      margin-top: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 10px;
+    }
+
+    .outreach-note {
+      font-size: 0.79rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-top: 6px;
+    }
+
+    /* KPI Strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 780px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-label { font-size: 0.74rem; font-weight: 600; color: var(--muted); }
+
+    .kpi-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-top: 4px;
+      line-height: 1.15;
+      color: var(--fg);
+    }
+
+    .kpi-sub { font-size: 0.74rem; color: var(--muted); margin-top: 4px; }
+
+    /* Batch Tab */
+    .dropzone {
+      border: 2px dashed var(--border-strong);
+      border-radius: 16px;
+      background: var(--surface-2);
+      padding: 26px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .batch-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    .filter-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .filter-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .filter-pill.active {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-top: 14px;
+      background: var(--surface);
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+
+    th {
+      text-align: left;
+      padding: 11px 14px;
+      font-size: 0.71rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tbody tr.clickable { cursor: pointer; }
+    tbody tr.clickable:hover td { background: var(--primary-soft); }
+
+    .score-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      display: inline-block;
+    }
+
+    .score-chip.Hot { background: var(--hot-soft); color: var(--hot); border: 1px solid var(--hot-border); }
+    .score-chip.Warm { background: var(--warm-soft); color: var(--warm); border: 1px solid var(--warm-border); }
+    .score-chip.Cold { background: var(--cold-soft); color: var(--cold); border: 1px solid var(--cold-border); }
+
+    /* Charts */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .chart-grid { grid-template-columns: 1fr; }
+    }
+
+    .hist-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+      height: 210px;
+      padding-top: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hist-col {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .hist-stack {
+      width: 100%;
+      display: flex;
+      flex-direction: column-reverse;
+      border-radius: 4px 4px 0 0;
+      overflow: hidden;
+      transition: opacity 0.15s;
+    }
+
+    .hist-col:hover .hist-stack { opacity: 0.8; }
+    .h-cold { background: #38bdf8; }
+    .h-warm { background: #f59e0b; }
+    .h-hot { background: #f43f5e; }
+
+    .hist-axis {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .fi-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .fi-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 48px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .fi-name {
+      color: var(--fg);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+    }
+
+    .fi-track {
+      height: 8px;
+      background: var(--surface-3);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .fi-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #4f46e5, #06b6d4);
+      border-radius: 999px;
+    }
+
+    .fi-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    /* Lift Banner */
+    .lift-card {
+      background: var(--hero-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .lift-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 280px;
+      flex: 1;
+      max-width: 440px;
+    }
+
+    .lift-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 56px;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+    }
+
+    .guardrails-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .guardrails-grid { grid-template-columns: 1fr; }
+    }
+
+    .guard-item {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .guard-item h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .guard-item p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="accent-strip"></div>
+
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-icon">XE</div>
+        <div>
+          <div class="brand-title">X Education · Lead Scoring Studio</div>
+          <div class="brand-sub">Conversion intelligence &amp; sales prioritization</div>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <nav class="tabs" role="tablist">
+          <button class="tab-btn active" data-tab="single">Single Lead</button>
+          <button class="tab-btn" data-tab="batch">Batch CSV</button>
+          <button class="tab-btn" data-tab="analytics">Analytics &amp; Guardrails</button>
+        </nav>
+        <button type="button" id="themeToggle" class="theme-btn" aria-label="Toggle Light/Dark Theme">
+          <span id="themeIcon">🌙</span>
+          <span id="themeLabel">Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero-banner">
+      <div>
+        <h1>Prioritize which student inquiries to call first.</h1>
+        <p>Scores website leads from 0–100 on conversion likelihood using a calibrated Random Forest pipeline and deterministic Hot/Warm/Cold action tiers.</p>
+      </div>
+      <div class="hero-badges">
+        <div class="model-badge">
+          <span class="pulse-dot"></span>
+          <span id="modelPill">RandomForest · 0.876 ROC-AUC · 80.3% Precision</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 1: SINGLE LEAD -->
+    <section id="tab-single" class="tab-panel active">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Lead Simulator</span>
+            <label class="live-switch">
+              <input type="checkbox" id="liveAutoScore" checked />
+              <span>Live auto-score</span>
+            </label>
+          </div>
+
+          <div class="preset-bar">
+            <button type="button" class="preset-btn hot" data-preset="Hot">
+              <span><span class="dot hot"></span> Hot Lead</span>
+              <span class="preset-score">~96</span>
+            </button>
+            <button type="button" class="preset-btn warm" data-preset="Warm">
+              <span><span class="dot warm"></span> Warm Lead</span>
+              <span class="preset-score">~58</span>
+            </button>
+            <button type="button" class="preset-btn cold" data-preset="Cold">
+              <span><span class="dot cold"></span> Cold Lead</span>
+              <span class="preset-score">~8</span>
+            </button>
+          </div>
+
+          <div class="whatif-box">
+            <div class="whatif-head">
+              <span>What-If Engagement Slider (Time Spent on Site)</span>
+              <span id="sliderTimeLabel">563 sec</span>
+            </div>
+            <input type="range" id="timeSlider" min="0" max="1800" step="10" value="563" />
+            <div class="whatif-hint">Drag to watch the lead score cross Cold (&lt;46), Warm (46–65), and Hot (66+) in real time.</div>
+          </div>
+
+          <form id="leadForm">
+            <div class="section-title">1. Behavioral Engagement</div>
+            <div class="form-grid-3">
+              <div class="field">
+                <label for="f_visits">Total Visits</label>
+                <input id="f_visits" type="number" min="0" step="1" value="0" />
+              </div>
+              <div class="field">
+                <label for="f_time">Time on Site (sec)</label>
+                <input id="f_time" type="number" min="0" step="10" value="0" />
+              </div>
+              <div class="field">
+                <label for="f_pages">Page Views / Visit</label>
+                <input id="f_pages" type="number" min="0" step="0.5" value="0" />
+              </div>
+            </div>
+            <div class="field" id="wrap_last_activity">
+              <label for="f_last_activity">Last Activity</label>
+              <select id="f_last_activity"></select>
+            </div>
+
+            <div class="section-title">2. Acquisition Source</div>
+            <div class="form-grid-3">
+              <div class="field">
+                <label for="f_origin">Lead Origin</label>
+                <select id="f_origin"></select>
+              </div>
+              <div class="field">
+                <label for="f_source">Lead Source</label>
+                <select id="f_source"></select>
+              </div>
+              <div class="field" id="wrap_how_heard">
+                <label for="f_how_heard">Referral Channel</label>
+                <select id="f_how_heard"></select>
+              </div>
+            </div>
+
+            <div class="section-title">3. Student Profile</div>
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="f_occupation">Current Occupation</label>
+                <select id="f_occupation"></select>
+              </div>
+              <div class="field">
+                <label for="f_specialization">Specialization</label>
+                <select id="f_specialization"></select>
+              </div>
+              <div class="field">
+                <label for="f_city">City</label>
+                <select id="f_city"></select>
+              </div>
+              <div class="field">
+                <label for="f_country">Country</label>
+                <select id="f_country"></select>
+              </div>
+            </div>
+
+            <div class="section-title">4. Communication Preferences</div>
+            <div class="form-grid-3">
+              <div class="field" id="wrap_dne">
+                <label for="f_dne">Do Not Email</label>
+                <select id="f_dne"><option>No</option><option>Yes</option></select>
+              </div>
+              <div class="field" id="wrap_dnc">
+                <label for="f_dnc">Do Not Call</label>
+                <select id="f_dnc"><option>No</option><option>Yes</option></select>
+              </div>
+              <div class="field" id="wrap_copy">
+                <label for="f_copy">Free Interview Copy</label>
+                <select id="f_copy"><option>No</option><option>Yes</option></select>
+              </div>
+            </div>
+
+            <button type="submit" id="scoreBtn" class="btn-primary">Score &amp; Draft Outreach →</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Prediction &amp; Next Action</span>
+            <span class="mono-tag" id="scoreLatency">—</span>
+          </div>
+
+          <div class="gauge-wrap">
+            <div class="gauge-svg-box">
+              <svg class="gauge-svg" viewBox="0 0 200 115">
+                <path class="gauge-track" d="M 20 100 A 80 80 0 0 1 180 100" />
+                <path id="gaugeArc" class="gauge-fill" d="M 20 100 A 80 80 0 0 1 180 100" />
+              </svg>
+              <div class="gauge-center">
+                <div class="gauge-score" id="scoreNum">—</div>
+                <div class="gauge-sub">LEAD SCORE / 100</div>
+              </div>
+            </div>
+            <div id="tierBadge" class="tier-badge">Select a preset or submit</div>
+            <div id="actionText" class="action-text">Waiting for lead details</div>
+          </div>
+
+          <div class="signals-box">
+            <div class="spectrum-head" style="margin-bottom:0;">
+              <span>Key Signals For This Lead</span>
+              <span>Live Profile Summary</span>
+            </div>
+            <div id="signalChips" class="signals-grid"></div>
+          </div>
+
+          <div class="spectrum-box">
+            <div class="spectrum-head">
+              <span>Tier Cutoffs</span>
+              <span>PR-Curve Calibrated</span>
+            </div>
+            <div class="spectrum-bar">
+              <div class="seg-cold"></div>
+              <div class="seg-warm"></div>
+              <div class="seg-hot"></div>
+            </div>
+            <div class="spectrum-marker">
+              <div id="spectrumPin" class="marker-pin"></div>
+            </div>
+            <div class="spectrum-legend">
+              <span>Cold (&lt; 46)</span>
+              <span>Warm (46–65)</span>
+              <span>Hot (66–100)</span>
+            </div>
+          </div>
+
+          <div class="outreach-box">
+            <div class="card-head" style="margin-bottom:4px;">
+              <span class="card-title" style="font-size:0.86rem;">Suggested Outreach (Gemini AI)</span>
+              <button type="button" id="copyDraftBtn" class="btn-secondary" style="padding:4px 10px; font-size:0.72rem; display:none;">Copy Draft</button>
+            </div>
+            <div id="outreachContent" class="outreach-note">
+              Click a preset or score a lead to see the deterministic recommendation and outreach template.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: BATCH CSV -->
+    <section id="tab-batch" class="tab-panel">
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Bulk CSV Lead Scoring</span>
+          <span class="mono-tag" id="batchMetaLabel">Upload CSV or run 40-lead sample</span>
+        </div>
+
+        <div id="dropzone" class="dropzone">
+          <input type="file" id="csvFileInput" accept=".csv" hidden />
+          <div style="font-size:1rem; font-weight:700; margin-bottom:4px; color:var(--fg);">Drop your leads CSV here, or click to browse</div>
+          <div style="font-size:0.84rem; color:var(--muted);">Uses the exact same fitted Random Forest pipeline as single-lead scoring.</div>
+        </div>
+
+        <div class="batch-actions">
+          <button type="button" id="runSampleBatchBtn" class="btn-primary" style="width:auto; margin-top:0;">
+            Run 40-Lead Sample Batch →
+          </button>
+          <a href="/api/sample-csv" class="btn-secondary">Download Sample CSV</a>
+          <button type="button" id="downloadScoredBtn" class="btn-secondary" style="display:none;">
+            Download Scored Results CSV
+          </button>
+        </div>
+      </div>
+
+      <div id="batchResults" style="display:none; margin-top:18px;">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Total Scored</div>
+            <div class="kpi-val" id="bTotal">0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Average Score</div>
+            <div class="kpi-val" id="bAvg">0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Hot Leads</div>
+            <div class="kpi-val" style="color:var(--hot);" id="bHot">0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Warm / Cold</div>
+            <div class="kpi-val" id="bWarmCold">0 / 0</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <span class="card-title">Ranked Lead Queue (Top 100)</span>
+              <span class="brand-sub" style="margin-left:8px;">Click any row to inspect in Simulator</span>
+            </div>
+            <div class="filter-pills">
+              <button type="button" class="filter-pill active" data-tier="All">All</button>
+              <button type="button" class="filter-pill" data-tier="Hot">Hot</button>
+              <button type="button" class="filter-pill" data-tier="Warm">Warm</button>
+              <button type="button" class="filter-pill" data-tier="Cold">Cold</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Score</th>
+                  <th>Tier</th>
+                  <th>Next Action</th>
+                  <th>Occupation</th>
+                  <th>Specialization</th>
+                  <th>Source</th>
+                  <th>Time (s)</th>
+                  <th>Visits</th>
+                </tr>
+              </thead>
+              <tbody id="batchTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: ANALYTICS & GUARDRAILS -->
+    <section id="tab-analytics" class="tab-panel">
+      <div class="lift-card">
+        <div>
+          <div class="card-title" style="font-size:1.05rem;">Why Prioritization Matters (Sales Conversion Lift)</div>
+          <p class="brand-sub" style="margin-top:4px;" id="liftCopy">
+            Calling leads randomly yields ~38.5% conversion. Prioritizing the Hot queue (Score &ge; 66) hits 80.3% precision — over 2× higher efficiency.
+          </p>
+        </div>
+        <div class="lift-bars">
+          <div class="lift-row">
+            <span style="color:var(--muted);">Random Calling</span>
+            <div class="fi-track"><div class="fi-bar" id="liftBaseBar" style="width:38.5%; background:var(--muted);"></div></div>
+            <span class="fi-val" id="liftBaseVal">38.5%</span>
+          </div>
+          <div class="lift-row">
+            <span style="font-weight:700; color:var(--success);">Hot Queue (&ge;66)</span>
+            <div class="fi-track"><div class="fi-bar" id="liftHotBar" style="width:80.3%; background:var(--success);"></div></div>
+            <span class="fi-val" id="liftHotVal" style="color:var(--success); font-weight:700;">80.3%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Dataset Scope</div>
+          <div class="kpi-val" id="aTotal">—</div>
+          <div class="kpi-sub" id="aSource">Training baseline</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Average Score</div>
+          <div class="kpi-val" id="aAvg">—</div>
+          <div class="kpi-sub">0–100 conversion scale</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">% Flagged Hot</div>
+          <div class="kpi-val" style="color:var(--hot);" id="aPctHot">—</div>
+          <div class="kpi-sub">Score &ge; 66 threshold</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Precision @ Hot</div>
+          <div class="kpi-val" style="color:var(--success);" id="aPrec">—</div>
+          <div class="kpi-sub">Meets &ge;80% target</div>
+        </div>
+      </div>
+
+      <div class="chart-grid">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Lead Score Distribution (0–100)</span>
+            <span class="mono-tag">Cold · Warm · Hot</span>
+          </div>
+          <div id="histChart" class="hist-chart"></div>
+          <div class="hist-axis">
+            <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Top Score Drivers (Feature Importance)</span>
+          </div>
+          <div id="fiList" class="fi-list"></div>
+        </div>
+      </div>
+
+      <div class="chart-grid">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">5-Fold CV Model Comparison &amp; Calibration</span>
+          </div>
+          <div class="table-wrap" style="margin-top:0;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>5-Fold CV ROC-AUC</th>
+                  <th>CV Std</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="modelCompBody"></tbody>
+            </table>
+          </div>
+          <div class="kpi-sub" id="calNote" style="margin-top:12px;"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Built-In System Guardrails</span>
+          </div>
+          <div class="guardrails-grid">
+            <div class="guard-item">
+              <h4>No Data Leakage</h4>
+              <p>Drops 10 post-rep columns (Tags, Lead Quality, Asymmetrique*, Last Notable Activity) before fitting or scoring.</p>
+            </div>
+            <div class="guard-item">
+              <h4>Train/Serve Parity</h4>
+              <p>Single fitted pipeline.joblib handles missing values, rare categories, scaling, and unseen categories identically.</p>
+            </div>
+            <div class="guard-item">
+              <h4>Deterministic Tiers</h4>
+              <p>Hot/Warm/Cold cutoffs and next-action rules come strictly from metadata.json — never guessed by an LLM.</p>
+            </div>
+            <div class="guard-item">
+              <h4>PII-Free GenAI</h4>
+              <p>Gemini receives only 5 anonymized attributes on Tab 1 lookups — never names, emails, phones, IDs, or batch rows.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let BOOTSTRAP = null;
+    let CURRENT_BATCH_CSV = '';
+    let CURRENT_BATCH_ROWS = [];
+    let ACTIVE_TIER_FILTER = 'All';
+    let LIVE_TIMER = null;
+
+    // Theme toggle with localStorage persistence
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('xe_lead_theme', theme);
+      const isDark = theme === 'dark';
+      document.getElementById('themeIcon').textContent = isDark ? '☀️' : '🌙';
+      document.getElementById('themeLabel').textContent = isDark ? 'Light' : 'Dark';
+    }
+
+    const savedTheme = localStorage.getItem('xe_lead_theme') || 'light';
+    applyTheme(savedTheme);
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tabName}`));
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    function fillSelect(id, options) {
+      const el = document.getElementById(id);
+      if (!el || !options) return;
+      el.innerHTML = options.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('');
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[m]));
+    }
+
+    function syncTimeSlider(val) {
+      const clamped = Math.max(0, Math.min(1800, Number(val || 0)));
+      document.getElementById('timeSlider').value = clamped;
+      document.getElementById('sliderTimeLabel').textContent = `${Number(val || 0)} sec`;
+    }
+
+    function setSelectValue(id, val) {
+      const el = document.getElementById(id);
+      if (el && val && Array.from(el.options).some(o => o.value === val)) {
+        el.value = val;
+      }
+    }
+
+    function applyPreset(name) {
+      if (!BOOTSTRAP || !BOOTSTRAP.presets[name]) return;
+      const p = BOOTSTRAP.presets[name];
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset === name));
+
+      document.getElementById('f_visits').value = p['TotalVisits'];
+      document.getElementById('f_time').value = p['Total Time Spent on Website'];
+      syncTimeSlider(p['Total Time Spent on Website']);
+      document.getElementById('f_pages').value = p['Page Views Per Visit'];
+
+      setSelectValue('f_last_activity', p['Last Activity']);
+      setSelectValue('f_origin', p['Lead Origin']);
+      setSelectValue('f_source', p['Lead Source']);
+      setSelectValue('f_how_heard', p['How did you hear about X Education']);
+      setSelectValue('f_occupation', p['What is your current occupation']);
+      setSelectValue('f_specialization', p['Specialization']);
+      setSelectValue('f_city', p['City']);
+      setSelectValue('f_country', p['Country']);
+      setSelectValue('f_dne', p['Do Not Email']);
+      setSelectValue('f_dnc', p['Do Not Call']);
+      setSelectValue('f_copy', p['A free copy of Mastering The Interview']);
+    }
+
+    function getFormPayload(includeDraft = true) {
+      return {
+        TotalVisits: Number(document.getElementById('f_visits').value || 0),
+        time_on_site: Number(document.getElementById('f_time').value || 0),
+        page_views: Number(document.getElementById('f_pages').value || 0),
+        last_activity: document.getElementById('f_last_activity')?.value || null,
+        lead_origin: document.getElementById('f_origin').value,
+        lead_source: document.getElementById('f_source').value,
+        how_heard: document.getElementById('f_how_heard')?.value || null,
+        occupation: document.getElementById('f_occupation').value,
+        specialization: document.getElementById('f_specialization').value,
+        city: document.getElementById('f_city').value,
+        country: document.getElementById('f_country').value,
+        do_not_email: document.getElementById('f_dne').value,
+        do_not_call: document.getElementById('f_dnc').value,
+        free_copy: document.getElementById('f_copy').value,
+        include_draft: includeDraft,
+      };
+    }
+
+    function renderSignalChips(payload) {
+      const chips = [
+        `Time: <strong>${payload.time_on_site}s</strong>`,
+        `Visits: <strong>${payload.TotalVisits}</strong>`,
+        `Activity: <strong>${escapeHtml(payload.last_activity || '—')}</strong>`,
+        `Occupation: <strong>${escapeHtml(payload.occupation || '—')}</strong>`,
+        `Source: <strong>${escapeHtml(payload.lead_source || '—')}</strong>`,
+      ];
+      if (payload.do_not_email === 'Yes') chips.push('<strong>Do Not Email: Yes</strong>');
+      document.getElementById('signalChips').innerHTML = chips.map(c => `<span class="signal-chip">${c}</span>`).join('');
+    }
+
+    async function scoreCurrentForm(includeDraft = true) {
+      const btn = document.getElementById('scoreBtn');
+      if (includeDraft) {
+        btn.disabled = true;
+        btn.textContent = 'Scoring...';
+      }
+
+      const payload = getFormPayload(includeDraft);
+      renderSignalChips(payload);
+
+      try {
+        const res = await fetch('/api/score', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        renderSingleScore(data, includeDraft);
+      } catch (err) {
+        document.getElementById('actionText').textContent = 'Error scoring lead';
+      } finally {
+        if (includeDraft) {
+          btn.disabled = false;
+          btn.textContent = 'Score & Draft Outreach →';
+        }
+      }
+    }
+
+    function scheduleLiveScore() {
+      if (!document.getElementById('liveAutoScore').checked) return;
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+      if (LIVE_TIMER) clearTimeout(LIVE_TIMER);
+      LIVE_TIMER = setTimeout(() => scoreCurrentForm(false), 160);
+    }
+
+    function renderSingleScore(data, updateOutreach = true) {
+      const score = data.score;
+      const tier = data.tier;
+      const lower = tier.toLowerCase();
+      const colorMap = { Hot: 'var(--hot)', Warm: 'var(--warm)', Cold: 'var(--cold)' };
+      const color = colorMap[tier] || 'var(--primary)';
+
+      const arcLen = 251.2;
+      const offset = arcLen * (1 - Math.max(0, Math.min(100, score)) / 100);
+      const arc = document.getElementById('gaugeArc');
+      arc.style.stroke = color;
+      arc.style.strokeDashoffset = offset.toFixed(1);
+
+      const scoreNum = document.getElementById('scoreNum');
+      scoreNum.textContent = score;
+      scoreNum.style.color = color;
+
+      const badge = document.getElementById('tierBadge');
+      badge.className = `tier-badge ${lower}`;
+      badge.textContent = `${tier.toUpperCase()} LEAD`;
+
+      document.getElementById('actionText').textContent = data.recommendation;
+      document.getElementById('scoreLatency').textContent = `${data.latency_ms} ms`;
+
+      const pin = document.getElementById('spectrumPin');
+      pin.style.display = 'block';
+      pin.style.left = `${score}%`;
+
+      if (updateOutreach) {
+        const outEl = document.getElementById('outreachContent');
+        const copyBtn = document.getElementById('copyDraftBtn');
+        if (data.draft) {
+          outEl.className = 'outreach-body';
+          outEl.textContent = data.draft;
+          copyBtn.style.display = 'inline-flex';
+          copyBtn.onclick = () => {
+            navigator.clipboard.writeText(data.draft);
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => (copyBtn.textContent = 'Copy Draft'), 1500);
+          };
+        } else {
+          outEl.className = 'outreach-note';
+          outEl.textContent = data.draft_note || 'AI draft unavailable.';
+          copyBtn.style.display = 'none';
+        }
+      }
+    }
+
+    // Wire slider & form inputs for live What-If scoring
+    document.getElementById('timeSlider').addEventListener('input', e => {
+      document.getElementById('f_time').value = e.target.value;
+      document.getElementById('sliderTimeLabel').textContent = `${e.target.value} sec`;
+      scheduleLiveScore();
+    });
+
+    document.getElementById('f_time').addEventListener('input', e => {
+      syncTimeSlider(e.target.value);
+      scheduleLiveScore();
+    });
+
+    document.querySelectorAll('#leadForm input, #leadForm select').forEach(el => {
+      if (el.id === 'f_time') return;
+      el.addEventListener('change', scheduleLiveScore);
+      if (el.tagName === 'INPUT') el.addEventListener('input', scheduleLiveScore);
+    });
+
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        applyPreset(btn.dataset.preset);
+        scoreCurrentForm(true);
+      });
+    });
+
+    document.getElementById('leadForm').addEventListener('submit', e => {
+      e.preventDefault();
+      scoreCurrentForm(true);
+    });
+
+    // Batch tab
+    function renderBatch(data) {
+      CURRENT_BATCH_CSV = data.csv_text || '';
+      CURRENT_BATCH_ROWS = data.rows || [];
+      const s = data.summary;
+
+      document.getElementById('batchResults').style.display = 'block';
+      document.getElementById('downloadScoredBtn').style.display = 'inline-flex';
+      document.getElementById('batchMetaLabel').textContent = s.source_label;
+
+      document.getElementById('bTotal').textContent = s.total_leads.toLocaleString();
+      document.getElementById('bAvg').textContent = s.avg_score;
+      document.getElementById('bHot').textContent = `${s.tier_counts.Hot} (${s.pct_hot}%)`;
+      document.getElementById('bWarmCold').textContent = `${s.tier_counts.Warm} / ${s.tier_counts.Cold}`;
+
+      renderBatchTable();
+      renderAnalytics(s, BOOTSTRAP.metadata, BOOTSTRAP.feature_importance);
+    }
+
+    function renderBatchTable() {
+      const tbody = document.getElementById('batchTableBody');
+      const filtered = ACTIVE_TIER_FILTER === 'All'
+        ? CURRENT_BATCH_ROWS
+        : CURRENT_BATCH_ROWS.filter(r => r.Tier === ACTIVE_TIER_FILTER);
+
+      tbody.innerHTML = filtered.map((r, idx) => `
+        <tr class="clickable" data-row-index="${idx}" title="Click to inspect this lead in the simulator">
+          <td><span class="score-chip ${r.Tier}">${r['Lead Score']}</span></td>
+          <td>${escapeHtml(r.Tier)}</td>
+          <td>${escapeHtml(r['Recommended Action'])}</td>
+          <td>${escapeHtml(r['What is your current occupation'] ?? '—')}</td>
+          <td>${escapeHtml(r['Specialization'] ?? '—')}</td>
+          <td>${escapeHtml(r['Lead Source'] ?? '—')}</td>
+          <td>${escapeHtml(r['Total Time Spent on Website'] ?? '—')}</td>
+          <td>${escapeHtml(r['TotalVisits'] ?? '—')}</td>
+        </tr>
+      `).join('');
+
+      tbody.querySelectorAll('tr.clickable').forEach(tr => {
+        tr.addEventListener('click', () => {
+          const row = filtered[Number(tr.dataset.rowIndex)];
+          if (!row) return;
+          document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+          document.getElementById('f_visits').value = Number(row['TotalVisits'] || 0);
+          document.getElementById('f_time').value = Number(row['Total Time Spent on Website'] || 0);
+          syncTimeSlider(row['Total Time Spent on Website'] || 0);
+          setSelectValue('f_last_activity', row['Last Activity']);
+          setSelectValue('f_source', row['Lead Source']);
+          setSelectValue('f_occupation', row['What is your current occupation']);
+          setSelectValue('f_specialization', row['Specialization']);
+          switchTab('single');
+          scoreCurrentForm(true);
+        });
+      });
+    }
+
+    document.querySelectorAll('.filter-pill').forEach(p => {
+      p.addEventListener('click', () => {
+        document.querySelectorAll('.filter-pill').forEach(x => x.classList.remove('active'));
+        p.classList.add('active');
+        ACTIVE_TIER_FILTER = p.dataset.tier;
+        renderBatchTable();
+      });
+    });
+
+    document.getElementById('runSampleBatchBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('runSampleBatchBtn');
+      btn.disabled = true;
+      btn.textContent = 'Scoring 40 leads...';
+      try {
+        const res = await fetch('/api/sample-batch', { method: 'POST' });
+        const data = await res.json();
+        renderBatch(data);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Run 40-Lead Sample Batch →';
+      }
+    });
+
+    document.getElementById('downloadScoredBtn').addEventListener('click', () => {
+      const blob = new Blob([CURRENT_BATCH_CSV], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'scored_leads.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    const dropzone = document.getElementById('dropzone');
+    const csvInput = document.getElementById('csvFileInput');
+    dropzone.addEventListener('click', () => csvInput.click());
+    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if (e.dataTransfer.files[0]) uploadBatchFile(e.dataTransfer.files[0]);
+    });
+    csvInput.addEventListener('change', () => {
+      if (csvInput.files[0]) uploadBatchFile(csvInput.files[0]);
+    });
+
+    async function uploadBatchFile(file) {
+      const form = new FormData();
+      form.append('file', file);
+      document.getElementById('batchMetaLabel').textContent = `Scoring ${file.name}...`;
+      const res = await fetch('/api/batch', { method: 'POST', body: form });
+      if (!res.ok) {
+        const err = await res.json();
+        alert(err.detail || 'Batch scoring failed.');
+        return;
+      }
+      const data = await res.json();
+      renderBatch(data);
+    }
+
+    function renderAnalytics(analytics, meta, fi) {
+      document.getElementById('aTotal').textContent = analytics.total_leads.toLocaleString();
+      document.getElementById('aSource').textContent = analytics.source_label;
+      document.getElementById('aAvg').textContent = analytics.avg_score;
+      document.getElementById('aPctHot').textContent = `${analytics.pct_hot}%`;
+      const hotPrec = (meta.precision_at_hot_threshold * 100).toFixed(1);
+      document.getElementById('aPrec').textContent = `${hotPrec}%`;
+
+      if (BOOTSTRAP && BOOTSTRAP.baseline_conversion_rate) {
+        const base = BOOTSTRAP.baseline_conversion_rate;
+        const lift = (Number(hotPrec) / base).toFixed(1);
+        document.getElementById('liftCopy').textContent =
+          `Calling leads randomly yields ${base}% conversion. Prioritizing the Hot queue (Score >= ${meta.hot_threshold}) hits ${hotPrec}% precision — ${lift}x higher efficiency.`;
+        document.getElementById('liftBaseBar').style.width = `${base}%`;
+        document.getElementById('liftBaseVal').textContent = `${base}%`;
+        document.getElementById('liftHotBar').style.width = `${hotPrec}%`;
+        document.getElementById('liftHotVal').textContent = `${hotPrec}%`;
+      }
+
+      const bins = analytics.histogram || [];
+      const maxBin = Math.max(1, ...bins.map(b => b.Hot + b.Warm + b.Cold));
+      document.getElementById('histChart').innerHTML = bins.map(b => {
+        const total = b.Hot + b.Warm + b.Cold;
+        const hCold = (b.Cold / maxBin) * 100;
+        const hWarm = (b.Warm / maxBin) * 100;
+        const hHot = (b.Hot / maxBin) * 100;
+        return `
+          <div class="hist-col" title="${b.range}: ${total} leads (Hot ${b.Hot}, Warm ${b.Warm}, Cold ${b.Cold})">
+            <div class="hist-stack" style="height:100%;">
+              <div class="h-cold" style="height:${hCold.toFixed(1)}%"></div>
+              <div class="h-warm" style="height:${hWarm.toFixed(1)}%"></div>
+              <div class="h-hot" style="height:${hHot.toFixed(1)}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const maxImp = Math.max(0.0001, ...fi.map(x => x.importance));
+      document.getElementById('fiList').innerHTML = fi.map(x => `
+        <div class="fi-row">
+          <div class="fi-name" title="${escapeHtml(x.feature)}">${escapeHtml(x.feature)}</div>
+          <div class="fi-track"><div class="fi-bar" style="width:${((x.importance / maxImp) * 100).toFixed(1)}%"></div></div>
+          <div class="fi-val">${(x.importance * 100).toFixed(1)}%</div>
+        </div>
+      `).join('');
+
+      const candidates = [...(meta.candidate_model_comparison || [])].sort((a, b) => b.roc_auc_mean - a.roc_auc_mean);
+      document.getElementById('modelCompBody').innerHTML = candidates.map(c => {
+        const selected = c.model === meta.model_type;
+        return `
+          <tr>
+            <td style="font-weight:${selected ? '700' : '400'};">${escapeHtml(c.model)}</td>
+            <td style="font-family:'JetBrains Mono',monospace;">${c.roc_auc_mean.toFixed(4)}</td>
+            <td style="font-family:'JetBrains Mono',monospace; color:var(--muted);">±${c.roc_auc_std.toFixed(4)}</td>
+            <td>${selected ? '<span class="score-chip Hot" style="color:var(--primary);background:var(--primary-soft);border-color:var(--primary-border);">Selected</span>' : '<span style="color:var(--muted);">Candidate</span>'}</td>
+          </tr>
+        `;
+      }).join('');
+
+      const cal = meta.calibration_check || {};
+      document.getElementById('calNote').textContent =
+        `Brier score: ${(cal.brier_score_before ?? 0).toFixed(4)} · Max reliability gap: ${(cal.max_reliability_gap_before ?? 0).toFixed(4)} (< 0.10 threshold) · Recall @ Hot: ${(meta.recall_at_hot_threshold * 100).toFixed(1)}%`;
+    }
+
+    async function init() {
+      const res = await fetch('/api/bootstrap');
+      BOOTSTRAP = await res.json();
+
+      const opts = BOOTSTRAP.dropdown_options;
+      const cols = BOOTSTRAP.feature_columns;
+
+      fillSelect('f_last_activity', opts['Last Activity']);
+      fillSelect('f_origin', opts['Lead Origin']);
+      fillSelect('f_source', opts['Lead Source']);
+      fillSelect('f_how_heard', opts['How did you hear about X Education']);
+      fillSelect('f_occupation', opts['What is your current occupation']);
+      fillSelect('f_specialization', opts['Specialization']);
+      fillSelect('f_city', opts['City']);
+      fillSelect('f_country', opts['Country']);
+
+      if (!cols.includes('Last Activity')) document.getElementById('wrap_last_activity').style.display = 'none';
+      if (!cols.includes('How did you hear about X Education')) document.getElementById('wrap_how_heard').style.display = 'none';
+
+      const meta = BOOTSTRAP.metadata;
+      document.getElementById('modelPill').textContent =
+        `${meta.model_type} · ${meta.test_roc_auc.toFixed(3)} ROC-AUC · ${(meta.precision_at_hot_threshold * 100).toFixed(1)}% Hot Precision`;
+
+      renderAnalytics(BOOTSTRAP.analytics, meta, BOOTSTRAP.feature_importance);
+      applyPreset('Hot');
+      scoreCurrentForm(true);
+    }
+
+    init();
+  </script>
+</body>
+</html>
