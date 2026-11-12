@@ -16,12 +16,16 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgomp1 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+RUN if [ "$(wc -c < model/pipeline.joblib)" -lt 1024 ]; then \
+      curl -fsSL -L "https://media.githubusercontent.com/media/shivangguptaaa/lead-scoring/main/model/pipeline.joblib" -o model/pipeline.joblib; \
+    fi
 COPY --from=frontend-builder /frontend/dist /app/frontend/dist
 
 EXPOSE 8501
